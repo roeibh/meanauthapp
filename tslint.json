@@ -1,10 +1,15 @@
 {
-    "extends": "tslint:recommended",
+    "extends": "tslint:latest",
     "rules": {
         "no-console": [
             false
         ],
+        "no-unused-variable": true,
         "promise-function-async": true,
+        "max-line-length": [
+            true,
+            160
+        ],
         "typedef": [
             true,
             "call-signature",
@@ -16,6 +21,19 @@
             "member-variable-declaration",
             "object-destructuring",
             "array-destructuring"
+        ],
+        "member-ordering": [
+            true,
+            {
+                "order": [
+                    "static-field",
+                    "instance-field",
+                    "constructor",
+                    "public-instance-method",
+                    "protected-instance-method",
+                    "private-instance-method"
+                ]
+            }
         ]
     }
 }
