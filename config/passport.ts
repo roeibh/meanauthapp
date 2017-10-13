@@ -10,8 +10,8 @@ const options: StrategyOptions = {
 export const strategy: jwtStrategy = new jwtStrategy(options, async (payload: any, done: VerifiedCallback): Promise<void> => {
     try {
         const user: InstanceType<User> | null = await User.findUserById(payload.id);
-        done(null, user);
+        return done(null, user);
     } catch (error) {
-        done(error, null);
+        return done(error, null);
     }
 });

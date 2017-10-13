@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { sign } from "jsonwebtoken";
+import * as passport from "passport";
 import { InstanceType } from "typegoose";
 import * as config from "../config/database";
 import { User } from "../models/user.model";
@@ -36,7 +37,7 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
       res.json({
         msg: `User authenticated`,
         success: true,
-        token: `JWT ${token}`,
+        token: `Bearer ${token}`,
         user: {
           email: user.email,
           id: user._id,
@@ -53,6 +54,6 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
 });
 
 // Profile
-router.get("/profile", (req: Request, res: Response, next: NextFunction) => {
-  res.send("PROFILE");
+router.get("/profile", passport.authenticate("jwt", { session: false }), (req: Request, res: Response, next: NextFunction) => {
+  res.json({user: req.user});
 });

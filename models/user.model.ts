@@ -46,7 +46,7 @@ export class User extends Typegoose {
             throw err;
         }
     }
-    // helper functions
+
     public static async verifyEmailAndUsername(email: string, username: string): Promise<void> {
         if (await this.findUserByEmail(email)) {
             throw new Error("email already exist");
@@ -55,9 +55,11 @@ export class User extends Typegoose {
         }
         return;
     }
+    // helper functions
     public static plainObjectUser(user: InstanceType<User>): object {
         return {
             email: user.email,
+            id: user._id,
             name: user.name,
             password: user.password,
             username: user.username,
