@@ -3,6 +3,9 @@
 # only ts files
 *.js
 
+# no maps
+*.js.map
+
 # compiled output
 /dist
 /tmp
@@ -10,6 +13,9 @@
 
 # dependencies
 /node_modules
+
+# public angular folder
+/public
 
 # IDEs and editors
 /.idea

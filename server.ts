@@ -1,6 +1,6 @@
 import { App } from "./app";
 
-let server = new App();
+const server: App = new App();
 
 // Start the server
 server.app.listen(3000, () => {

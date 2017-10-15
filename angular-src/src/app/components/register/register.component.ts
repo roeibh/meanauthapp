@@ -16,7 +16,8 @@ export class RegisterComponent implements OnInit {
   password: string;
   username: string;
 
-  constructor(private authService: AuthService,
+  constructor(
+    private authService: AuthService,
     private validateService: ValidateService,
     private flashMessagesService: FlashMessagesService,
     private router: Router) { }
@@ -26,10 +27,10 @@ export class RegisterComponent implements OnInit {
 
   onRegisterSubmit() {
     const user: IUser = {
-      email: this.email,
+      email: this.email.toLowerCase(),
       name: this.name,
       password: this.password,
-      username: this.username
+      username: this.username.toLowerCase()
     };
     // validate fields
     if (!this.validateService.validateRegister(user)) {

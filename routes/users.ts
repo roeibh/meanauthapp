@@ -32,10 +32,10 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
     const isMatch: boolean = await User.verifyUserPassword(user.password, req.body.password);
     if (isMatch) {
       const token: string = sign(User.plainObjectUser(user), config.secret, {
-        expiresIn: 86400, // one day
+        expiresIn: 604800, // one week
       });
       res.json({
-        msg: `User authenticated`,
+        msg: `Welcome back, ${user.name}`,
         success: true,
         token: `Bearer ${token}`,
         user: {
@@ -49,7 +49,7 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
       res.json({ msg: `Wrong password`, success: false });
     }
   } catch (error) {
-    return res.json({ msg: `${error}`, success: false });
+    return res.json({ msg: `User not found`, success: false });
   }
 });
 

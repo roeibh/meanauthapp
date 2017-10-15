@@ -15,6 +15,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 // services
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
+import { AuthGuard } from './services/auth-guard.service';
 
 
 // creates the routes we need for the app
@@ -22,8 +23,9 @@ const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({
@@ -43,7 +45,7 @@ const appRoutes: Routes = [
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [AuthService, ValidateService],
+  providers: [AuthService, AuthGuard, ValidateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

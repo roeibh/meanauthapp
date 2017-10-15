@@ -36,12 +36,12 @@ export class App {
     }
 
     private initServer(): void {
-        // cors Middleware
-        this.app.use(cors());
 
         // set Static Folder
         this.app.use(express.static(path.join(__dirname, "public")));
 
+        // cors Middleware
+        this.app.use(cors());
         // body Parser Middleware
         this.app.use(bodyParser.json());
 
@@ -51,5 +51,9 @@ export class App {
 
         // users router
         this.app.use("/users", usersRouter);
+
+        this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+            res.redirect("/");
+        });
     }
 }
