@@ -13,7 +13,7 @@ router.post("/register", async (req: Request, res: Response, next: NextFunction)
     const user: User = await User.addUser(req.body.email, req.body.password, req.body.username, req.body.name);
     if (!user) { throw new Error("user is null"); }
     res.json({
-      msg: "registered user",
+      msg: "You are now registered and can log in to your account",
       success: true,
     });
   } catch (error) {

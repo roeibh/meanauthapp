@@ -15,8 +15,9 @@ export class RegisterComponent implements OnInit {
   password: string;
   username: string;
 
-  // tslint:disable-next-line:max-line-length
-  constructor(private authService: AuthService, private validateService: ValidateService, private flashMessagesService: FlashMessagesService) { }
+  constructor(private authService: AuthService,
+    private validateService: ValidateService,
+    private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
   }
@@ -39,6 +40,12 @@ export class RegisterComponent implements OnInit {
       return false;
     }
     // register user
-    this.authService.registerUser(user).subscribe((value) => console.log(value));
-  }
+    this.authService.registerUser(user).subscribe((value) => {
+      console.log(value.success);
+      const flashOptions = value.success ?
+        { cssClass: 'alert-success', timeout: 3000 } :
+        { cssClass: 'alert-danger', timeout: 3000 };
+      this.flashMessagesService.show(`${value.msg}`, flashOptions);
+    });
+}
 }
