@@ -1,7 +1,7 @@
-import { argon2id, hash, verify } from "argon2";
+import { argon2id, hash } from "argon2";
 import { Model as mongooseModel } from "mongoose";
 import { InstanceType, prop, Typegoose } from "typegoose";
-
+// creating db model for user and adding functionality
 export class User extends Typegoose {
 
     @prop({ required: true })
@@ -13,15 +13,22 @@ export class User extends Typegoose {
     @prop({ required: true })
     public password: string;
 
+    @prop({required: true})
+    public twoFactorEnabled: boolean;
+
+    @prop({required: true})
+    public twoFactorSecret: string;
+
     @prop({ required: true })
     public username: string;
 
     public static async addUser(email: string, password: string, username: string, name?: string): Promise<User> {
-        password = await hash(password, { type: argon2id });
         const user: User = new User();
         user.email = email;
         user.name = name;
-        user.password = password;
+        user.password = await hash(password, { type: argon2id });
+        user.twoFactorEnabled = false;
+        user.twoFactorSecret = "null";
         user.username = username;
         await Model.create(user);
         return user;
@@ -39,22 +46,6 @@ export class User extends Typegoose {
         return Model.findOne({ email });
     }
 
-    public static async verifyUserPassword(hashedPassword: string, password: string): Promise<boolean> {
-        try {
-            return await verify(hashedPassword, password);
-        } catch (err) {
-            throw err;
-        }
-    }
-
-    public static async verifyEmailAndUsername(email: string, username: string): Promise<void> {
-        if (await this.findUserByEmail(email)) {
-            throw new Error("email already exist");
-        } else if (await this.findUserByUsername(username)) {
-            throw new Error("username already exist");
-        }
-        return;
-    }
     // helper functions
     public static plainObjectUser(user: InstanceType<User>): object {
         return {
@@ -62,10 +53,13 @@ export class User extends Typegoose {
             id: user._id,
             name: user.name,
             password: user.password,
+            twoFactorEnabled: user.twoFactorEnabled,
+            twoFactorSecret: user.twoFactorSecret,
             username: user.username,
         };
     }
 }
 
+// The model we'll use to create db objects
 const Model: mongooseModel<InstanceType<User>> & User & typeof User =
     new User().getModelForClass(User, { schemaOptions: { timestamps: true } });

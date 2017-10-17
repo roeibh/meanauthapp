@@ -25,6 +25,16 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
+  isAllFieldsFull() {
+    const user: IUser = {
+      email: this.email,
+      name: this.name,
+      password: this.password,
+      username: this.username
+    };
+    return this.validateService.validateRegister(user);
+  }
+
   onRegisterSubmit() {
     const user: IUser = {
       email: this.email.toLowerCase(),

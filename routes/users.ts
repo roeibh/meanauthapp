@@ -4,12 +4,13 @@ import * as passport from "passport";
 import { InstanceType } from "typegoose";
 import * as config from "../config/database";
 import { User } from "../models/user.model";
+import { Verificator } from "../security/verificator";
 export let router: Router = Router();
 
 // register
 router.post("/register", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await User.verifyEmailAndUsername(req.body.email, req.body.username);
+    await Verificator.verifyEmailAndUsername(req.body.email, req.body.username);
     const user: User = await User.addUser(req.body.email, req.body.password, req.body.username, req.body.name);
     if (!user) { throw new Error("user is null"); }
     res.json({
@@ -28,9 +29,10 @@ router.post("/register", async (req: Request, res: Response, next: NextFunction)
 router.post("/authenticate", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user: InstanceType<User> | null = await User.findUserByUsername(req.body.username);
-    if (!user) { throw new Error("user return null"); }
-    const isMatch: boolean = await User.verifyUserPassword(user.password, req.body.password);
-    if (isMatch) {
+    if (!user) { throw new Error("User not found"); }
+
+    // const isMatch: boolean = await User.verifyUserPassword(user.password, req.body.password);
+    if (await Verificator.verifyUserPassword(user.password, req.body.password)) {
       const token: string = sign(User.plainObjectUser(user), config.secret, {
         expiresIn: 604800, // one week
       });
@@ -49,7 +51,7 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
       res.json({ msg: `Wrong password`, success: false });
     }
   } catch (error) {
-    return res.json({ msg: `User not found`, success: false });
+    return res.json({ msg: `${error}`, success: false });
   }
 });
 

@@ -9,7 +9,7 @@ import { strategy } from "./config/passport";
 import { router as usersRouter } from "./routes/users";
 
 export class App {
-    public readonly app: express.Express = express();
+    public readonly expressApp: express.Express = express();
     constructor() {
         passport.use(strategy);
 
@@ -38,22 +38,28 @@ export class App {
     private initServer(): void {
 
         // set Static Folder
-        this.app.use(express.static(path.join(__dirname, "public")));
+        this.expressApp.use(express.static(path.join(__dirname, "public")));
 
-        // cors Middleware
-        this.app.use(cors());
-        // body Parser Middleware
-        this.app.use(bodyParser.json());
-
-        // passport Middleware
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
+        this.addMiddleware();
 
         // users router
-        this.app.use("/users", usersRouter);
+        this.expressApp.use("/users", usersRouter);
+        // make sure ever unknown path will go to the homepage
+        // this.expressApp.get("*", (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        //     res.redirect("/");
+        // });
+        // this.expressApp.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+        //     res.redirect("/");
+        // });
+    }
 
-        this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-            res.redirect("/");
-        });
+    private addMiddleware(): void {
+        // cors Middleware
+        this.expressApp.use(cors());
+        // body Parser Middleware
+        this.expressApp.use(bodyParser.json());
+        // passport Middleware
+        this.expressApp.use(passport.initialize());
+        this.expressApp.use(passport.session());
     }
 }
