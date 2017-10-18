@@ -64,7 +64,7 @@ router.get("/profile", passport.authenticate("jwt", { session: false }), (req: R
 // router.get("/test", async (req: Request, res: Response, next: NextFunction) => {
 //   try {
 //     // await TwoFactorAuth.testSpeackEasy();
-//     const user: InstanceType<User> | null = await User.findUserByEmail("roei86@gmail.com");
+//     const user: InstanceType<User> | null = await User.findUserByEmail("test@email.com");
 //     if (!user) { throw new Error("User not found"); }
 //     const imageURL: string = await TwoFactorAuth.generateQRCode(user);
 //     const verify: boolean = await TwoFactorAuth.verifyEnrollment(user, "572288");
