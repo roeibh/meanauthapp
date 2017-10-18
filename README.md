@@ -25,6 +25,11 @@ Install the dependencies
 ```sh
 $ npm install
 ```
+Build server (from ts to js)
+```sh
+$ tsc
+```
+
 Run server
 
 ```sh
