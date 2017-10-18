@@ -10,8 +10,28 @@ I use several packages other than the ones in the series
 * [argon2](https://github.com/ranisalt/node-argon2): Since argon2 is more secure than bcrypt (hit to parallelism due to the addition of memory requirements) I preffered using argon2 in my application.
 * [authenticator](https://git.daplie.com/Daplie/node-authenticator): In order to apply more security for the users, I've added the option to add support to 2fa-totp with Google Authenticator.
 
+
 ## Structure
 You can find the server in the home folder, and the client in "angular-src" folder.
 
-## Install
-In order to install and test the app, you need npm, nodejs and abgular cli. run "npm install" to install all dependencies, and then go to /angular-src and run ng-serve to run angular app. 
+
+## Usage
+In order to use the app you'll need _nodejs_, _npm_ and _angular-cli_
+
+### Installation
+
+Install the dependencies
+
+```sh
+$ npm install
+```
+Run server
+
+```sh
+$ npm start
+```
+
+Go to /angular-src and run the frontend
+```sh
+$ ng-serve
+```
