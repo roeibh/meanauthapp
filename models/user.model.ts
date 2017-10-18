@@ -13,10 +13,10 @@ export class User extends Typegoose {
     @prop({ required: true })
     public password: string;
 
-    @prop({required: true})
+    @prop({ required: true })
     public twoFactorEnabled: boolean;
 
-    @prop({required: true})
+    @prop({ required: true })
     public twoFactorSecret: string;
 
     @prop({ required: true })
@@ -46,6 +46,12 @@ export class User extends Typegoose {
         return Model.findOne({ email });
     }
 
+    public static async updateProperty(user: InstanceType<User>, property: string, value: string | boolean): Promise<InstanceType<User> | null> {
+        // const user: InstanceType<User> | null = await Model.findById(id);
+        if (!user) { throw new Error("User not found"); }
+        return this.findOneAndUpdatePromise(user._id, property, value);
+    }
+
     // helper functions
     public static plainObjectUser(user: InstanceType<User>): object {
         return {
@@ -57,6 +63,24 @@ export class User extends Typegoose {
             twoFactorSecret: user.twoFactorSecret,
             username: user.username,
         };
+    }
+
+    private static async findOneAndUpdatePromise(id: string, property: string, value: string | boolean): Promise<InstanceType<User>> {
+        return new Promise(
+            (
+                resolve: (value: InstanceType<User> | PromiseLike<InstanceType<User>> | undefined) => void,
+                reject: (reason: any) => void,
+            ): void => {
+            const setObject: { $set: { [key: string]: string | boolean } } = { $set: {} };
+            setObject.$set[property] = value;
+            Model.findOneAndUpdate(
+                { _id: id },
+                setObject,
+                { new: true },
+                (err: any, updatedUser: InstanceType<User>, res: any) => {
+                    return err ? reject(err) : resolve(updatedUser);
+                });
+        });
     }
 }
 

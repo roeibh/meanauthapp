@@ -6,6 +6,7 @@ import * as passport from "passport";
 import * as path from "path";
 import * as config from "./config/database";
 import { strategy } from "./config/passport";
+import { router as twofactorauthRouter } from "./routes/twofactorauthentication";
 import { router as usersRouter } from "./routes/users";
 
 export class App {
@@ -44,6 +45,9 @@ export class App {
 
         // users router
         this.expressApp.use("/users", usersRouter);
+
+        // 2fa router
+        this.expressApp.use("/twofactorauth", twofactorauthRouter);
         // make sure ever unknown path will go to the homepage
         // this.expressApp.get("*", (req: express.Request, res: express.Response, next: express.NextFunction) => {
         //     res.redirect("/");
