@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { sign } from "jsonwebtoken";
-import * as passport from "passport";
+import { authenticate } from "passport";
 import { InstanceType } from "typegoose";
-import * as config from "../config/database";
 import { User } from "../models/user.model";
 import { Verificator } from "../security/verificator";
+import { secret } from "./../config/database";
 export let router: Router = Router();
 
 // register
@@ -33,7 +33,7 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
 
     // const isMatch: boolean = await User.verifyUserPassword(user.password, req.body.password);
     if (await Verificator.verifyUserPassword(user.password, req.body.password)) {
-      const token: string = sign(User.plainObjectUser(user), config.secret, {
+      const token: string = sign(User.plainObjectUser(user), secret, {
         expiresIn: 604800, // one week
       });
       res.json({
@@ -56,7 +56,7 @@ router.post("/authenticate", async (req: Request, res: Response, next: NextFunct
 });
 
 // Profile
-router.get("/profile", passport.authenticate("jwt", { session: false }), (req: Request, res: Response, next: NextFunction) => {
+router.get("/profile", authenticate("jwt", { session: false }), (req: Request, res: Response, next: NextFunction) => {
   res.json({ user: req.user });
 });
 

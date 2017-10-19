@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response, Router } from "express";
-import * as passport from "passport";
+import { authenticate } from "passport";
 import { InstanceType } from "typegoose";
 import { User } from "../models/user.model";
 import { TwoFactorAuth } from "../security/two-factor-auth";
 export let router: Router = Router();
 
 // enrolment
-router.get("/enroll", passport.authenticate("jwt", { session: false }), async (req: Request, res: Response, next: NextFunction) => {
+router.get("/enroll", authenticate("jwt", { session: false }), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: InstanceType<User> | null = await User.findUserById(req.user._id);
         if (!user) { throw new Error("User not found"); }
@@ -21,7 +21,7 @@ router.get("/enroll", passport.authenticate("jwt", { session: false }), async (r
 });
 
 // verify
-router.post("/verify", passport.authenticate("jwt", { session: false }), async (req: Request, res: Response, next: NextFunction) => {
+router.post("/verify", authenticate("jwt", { session: false }), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: InstanceType<User> | null = await User.findUserById(req.user._id);
         if (!user) { throw new Error("User not found"); }
