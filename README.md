@@ -1,4 +1,4 @@
-# MEAN Application with Authentication - TypeScript
+# MEAN Application with First and Second Factor Authentication - Written in TypeScript
 simple MEAN-like application to practice adding security to application written in TypeScript.
 
 This application was written based on the series "MEAN Stack Front To Back" by [TraversyMedia](http://www.traversymedia.com/) which you can find [here](https://www.youtube.com/playlist?list=PLillGF-RfqbZMNtaOXJQiDebNXjVapWPZ).
